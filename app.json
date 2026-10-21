@@ -31,11 +31,12 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "SpendLens ben\u00f6tigt Zugriff auf ausgew\u00e4hlte Bonfotos.",
+          "photosPermission": "SpendLens benötigt Zugriff auf ausgewählte Bonfotos.",
           "cameraPermission": "SpendLens verwendet die Kamera zum Fotografieren deiner Kassenbons.",
           "microphonePermission": false
         }
-      ]
+      ],
+      "expo-font"
     ]
   }
 }

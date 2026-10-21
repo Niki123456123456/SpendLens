@@ -1,6 +1,18 @@
 # SpendLens
 
-Eine lokale Kassenbon-App mit **React Native, Expo 58, TypeScript und Expo Router** für iOS, Android und Web. Nach dem verlinkten [Konzept](https://chatgpt.com/c/6ad90c24-1824-83ed-bc95-ef41a09a4f62): Shop → Branch → Purchase → PurchaseItem. Kein Produktkatalog, kein gespeichertes `line_number` oder `line_total`.
+Eine lokale Kassenbon-App mit **React Native, Expo SDK 57, TypeScript und Expo Router** für iOS, Android und Web. Nach dem verlinkten [Konzept](https://chatgpt.com/c/6ad90c24-1824-83ed-bc95-ef41a09a4f62): Shop → Branch → Purchase → PurchaseItem. Kein Produktkatalog, kein gespeichertes `line_number` oder `line_total`.
+
+## Expo Go auf einem echten iPhone
+
+Das Projekt ist auf **SDK 57** abgestimmt, passend zur vom Nutzer bestätigten Expo-Go-Version auf seinem iPhone. Maßgeblich ist die SDK-Angabe der tatsächlich installierten Expo-Go-App. Die iOS-Version des Telefons ist nicht die Expo-SDK-Version.
+
+```sh
+npm run phone
+# Bei Netzwerkproblemen:
+npm run phone:tunnel
+```
+
+Expo Go öffnen und den QR-Code des aktuellen Servers scannen. Bei SDK-Upgrades zuerst prüfen, welche SDK-Version die tatsächlich installierte Expo-Go-App unterstützt. Ein erfolgreicher iOS-Bundle-Export belegt nicht die Kompatibilität mit einer beliebigen Expo-Go-Version.
 
 ## Starten
 
@@ -114,6 +126,6 @@ npx expo export --platform android --output-dir /tmp/spendlens-android
 
 Die nativen Exports prüfen den JavaScript-Bundle, ersetzen aber keinen echten Geräte-/Kameratest oder einen signierten nativen Build. OAuth- und KI-Live-Tests benötigen ein berechtigtes Konto. Ein erfolgreicher Web-Build allein verifiziert keine OpenAI-Berechtigung.
 
-### Bekannte Abhängigkeitsmeldungen
+### Abhängigkeitsprüfung
 
-`npm audit --omit=dev` meldet im installierten Expo-58-/React-Native-0.88-Abhängigkeitsbaum 19 als „high“ eingestufte Einträge, überwiegend durch weitergereichte Meldungen aus `braces` und `node-forge`. Die am 21.10.2026 verfügbaren Registry-Versionen `braces@3.0.3` und `node-forge@1.4.0` sind bereits installiert. Der vorgeschlagene automatische Fix würde unter anderem Expo auf 44 bzw. React Native auf 0.72 zurückstufen und wurde deshalb nicht angewendet. Vor einer öffentlichen Veröffentlichung müssen diese Meldungen erneut bewertet und durch kompatible Upstream-Updates behoben werden. Den Entwicklungsserver nicht öffentlich exponieren.
+Die frühere Audit-Auswertung für SDK 58 ist nach der Umstellung auf SDK 57 nicht mehr maßgeblich. Vor einer Veröffentlichung `npm audit` ausführen und Meldungen anhand des aktuellen Lockfiles bewerten. Keine automatischen Major-Downgrades durch `npm audit fix --force` durchführen.
