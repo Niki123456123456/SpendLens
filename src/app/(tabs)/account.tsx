@@ -1,12 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Linking, Platform, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Body, Button, Card, colors, Label, Loading, Notice, Screen, Title } from '../../components/ui';
 import { useStore } from '../../state/store';
 import { prepareSignIn, SignInAttempt } from '../../lib/api';
 import { hasDirectOpenAI, nativeBuildMessage } from '../../lib/direct-openai';
+import { shareReceiptExport } from '../../lib/export';
 export default function Account() {
-  const { session, demo, loading, error: storageError, login, logout, startDemo } = useStore();
+  const { ledger, session, demo, loading, error: storageError, login, logout, startDemo } = useStore();
+  const [exporting, setExporting] = useState(false);
+  const exportBusy = useRef(false);
   const [error, setError] = useState('');
   const [attempt, setAttempt] = useState<SignInAttempt>();
   const [revision, setRevision] = useState(0);
@@ -22,9 +25,22 @@ export default function Account() {
   }, [session, revision, iPhone, requiresBuild]);
   async function action(fn: () => Promise<void>) { setError(''); try { await fn(); } catch (e) { setError(e instanceof Error ? e.message : 'Aktion fehlgeschlagen.'); } }
   function connect(value: SignInAttempt) { void action(() => login(value)).finally(() => { setAttempt(undefined); setRevision(value => value + 1); }); }
+  async function exportBons() {
+    if (exportBusy.current) return;
+    exportBusy.current = true; setExporting(true);
+    try { await action(() => shareReceiptExport(ledger, demo)); }
+    finally { exportBusy.current = false; setExporting(false); }
+  }
   if (loading) return <Loading />;
   return <Screen>
     <View style={{ gap: 8 }}><Label>DEIN SPENDLENS</Label><Title>Schön, dass du da bist.</Title><Body>Deine Bons bleiben bei dir.</Body></View>
+    {(error || storageError) ? <Notice text={error || storageError} bad /> : null}
+    {iPhone && <Card>
+      <Text style={{ color: colors.ink, fontWeight: '700', fontSize: 20 }}>Deine Bons exportieren</Text>
+      <Body>{ledger.purchases.length} {ledger.purchases.length === 1 ? 'Bon' : 'Bons'} · {demo ? 'Beispieldaten' : 'Alle Bons im aktuellen Profil'}, einschließlich Händler, Filialen, Artikel, Kategorien und Beträge. Ohne Bonfotos.</Body>
+      <Button title={exporting ? 'Export läuft …' : 'Alle Bons als JSON exportieren'} icon="download-outline" disabled={exporting} onPress={() => { void exportBons(); }} />
+      <Body>Im Teilen-Menü „In Dateien sichern“ auswählen, um die JSON-Datei auf deinem iPhone zu speichern.</Body>
+    </Card>}
     <Card>
       <View style={{ backgroundColor: colors.mint, borderRadius: 22, padding: 20, alignSelf: 'flex-start' }}><Ionicons name="person-outline" color={colors.green} size={30} /></View>
       <Text style={{ color: colors.ink, fontWeight: '700', fontSize: 22 }}>{session?.user.name || (demo ? 'Demo ansehen' : 'Lokal unterwegs')}</Text>
@@ -44,7 +60,6 @@ export default function Account() {
         <Button title={demo ? 'Zurück zu meinen lokalen Daten' : 'Mit Beispieldaten ausprobieren'} secondary onPress={() => { void action(demo ? logout : startDemo); }} />
       </>}
     </Card>
-    {(error || storageError) ? <Notice text={error || storageError} bad /> : null}
     <Card><View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}><Ionicons name="shield-checkmark-outline" size={22} color={colors.green} /><Text style={{ color: colors.ink, fontWeight: '700', fontSize: 17 }}>Deine Daten, dein Gerät</Text></View>
       <Body>{iPhone ? 'Einkäufe und Bonbilder werden lokal gespeichert. Erst mit „Mit KI auslesen“ wird das ausgewählte Foto direkt vom iPhone an OpenAI übertragen.' : 'Einkäufe und Bonbilder werden lokal gespeichert. Erst mit „Mit KI auslesen“ wird das Foto über deinen SpendLens-Server an OpenAI übertragen.'}</Body>
       <Body style={{ fontSize: 12 }}>Keine Bankverbindung. Kein automatischer Cloud-Abgleich. Deine ChatGPT-Verbindung kannst du jederzeit trennen.</Body>

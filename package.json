@@ -20,6 +20,7 @@
     "expo-linking": "~57.0.13",
     "expo-router": "~57.0.29",
     "expo-secure-store": "~57.0.4",
+    "expo-sharing": "~57.0.24",
     "expo-status-bar": "~57.0.1",
     "expo-web-browser": "~57.0.3",
     "express": "^5.3.0",

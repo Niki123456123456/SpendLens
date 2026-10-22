@@ -118,6 +118,12 @@ Für öffentlichen Mehrbenutzerbetrieb sind ein persistenter Sitzungs-/Transakti
 
 ## Speicherung und Datenmodell
 
+### JSON-Export auf dem iPhone
+
+Profil → **Alle Bons als JSON exportieren** öffnet das iOS-Teilen-Menü. Dort **In Dateien sichern** wählen. Die Datei enthält alle Bons des aktuellen Profils, unabhängig von Monat oder Suche, samt Händlern, Filialen, Artikeln, Kategorien und Beträgen. Der Demo-Modus exportiert ausschließlich seine Beispieldaten und kennzeichnet sie als `source: demo`.
+
+Das versionierte Format `spendlens.receipts` enthält Exportzeitpunkt, den normalisierten `ledger` und die Betrags-Einheiten: `total_cents` in Cent und `unit_price_micros` in Millionstel Euro. Bonfotos, gerätegebundene Bildpfade und Anmeldedaten sind nicht enthalten. Nach Schließen des Teilen-Menüs wird die temporäre Exportdatei aus dem App-Cache entfernt; die gewählte gespeicherte oder geteilte Kopie bleibt erhalten. Ein JSON-Import ist derzeit nicht implementiert.
+
 - Händler und Filialen sind normalisiert; jeder Einkauf referenziert eine Filiale. Gleicher Händler/Typ und gleiche Adresse werden wiederverwendet.
 - Artikel bleiben historische Bonpositionen mit eigenem Namen/Preis/Kategorie.
 - Gesamtbeträge in Integer-Cent; Einzelpreise in Integer-Mikro-Euro, damit z. B. Kraftstoffpreise oder Dezimalmengen nicht vorzeitig auf Cent gerundet werden. Berechnete Positionssummen werden nicht gespeichert.
