@@ -1,4 +1,4 @@
-SpendLens — data inventory for App Store privacy declarations (draft, not a published privacy policy)
+SpendLens — data inventory for App Store privacy declarations (implementation inventory; the public policy is under site/)
 
 Local processing:
 - Purchase history: retailers, branch addresses, dates, items, quantities, prices, categories and totals.
@@ -8,7 +8,7 @@ Local processing:
 - JSON exports contain purchase data and references; they exclude images, credentials and device paths. Sharing happens only when the user initiates export.
 
 External processing:
-- Optional ChatGPT sign-in exchanges authentication information with OpenAI.
+- Optional ChatGPT sign-in exchanges authentication information with OpenAI, including an account identifier and a locally generated stable host/device identifier.
 - Optional AI reading transfers the selected receipt image and the extraction instructions to OpenAI. Receipt images may include purchase history, addresses, payment details or other personal information printed on the receipt.
 - For the native iOS app, this traffic goes directly to OpenAI. A SpendLens backend is not used by that path.
 
@@ -18,10 +18,12 @@ Publisher configuration:
 - Privacy: https://niki123456123456.github.io/SpendLens/privacy.html (English: /en/privacy.html).
 - Both localized support/privacy URLs have been saved in App Store Connect.
 
-Unresolved publisher facts:
-- Required private App Review contact details and applicable publisher contact requirements.
-- Regions and confirmation of the account's existing non-trader status for this app.
-- Applicable OpenAI data-retention terms and how they affect the App Store privacy questionnaire.
-- Third-party account revocation/deletion guidance and legally required user rights, based on the publisher's actual situation.
+Apple configuration confirmed by the publisher on 22 October 2026:
+- Required private App Review contact is saved in App Store Connect; do not copy private contact details into this public repository.
+- Free worldwide distribution in 175 regions is saved. The account already identified this app as non-trader; that classification was not changed.
+- Published privacy labels: payment information, photos/videos, purchase history, user ID and device ID. Each is used for app functionality, linked to the user and not used for tracking.
+- The publisher explicitly approved these answers and Apple's final publication assurance. Publication was verified in App Store Connect.
+- Do not infer zero retention or zero collection from local storage. Third-party terms apply to optional OpenAI processing.
+- The optional production ChatGPT connection and AI scan have not yet been verified live.
 
 No advertising, analytics SDK, bank connection or automatic receipt cloud sync is configured in this repository. Confirm the production build and third-party behavior before making declarations to Apple.
