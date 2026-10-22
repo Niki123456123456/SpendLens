@@ -1,0 +1,23 @@
+More clarity. Less paper.
+
+SpendLens helps you keep track of your everyday purchases. Photograph a receipt or enter it manually. Review the retailer, branch, date and items, then save your purchase on your device.
+
+YOUR PURCHASES IN ONE PLACE
+• Take receipt photos or choose them from your photo library
+• Enter purchases manually without an account
+• Review quantities, unit prices, discounts and categories
+• Search by retailer, item or date
+• Explore monthly spending by category
+• Keep original receipt photos with your purchases
+• Export receipts as JSON on iOS
+
+OPTIONAL AI RECEIPT READING
+Connect your eligible ChatGPT account to read receipt photos and categorize items. A selected receipt photo is sent to OpenAI only when you choose to read it with AI. This feature requires the appropriate ChatGPT authorization. Check all extracted details before saving.
+
+YOUR DATA ON YOUR DEVICE
+Purchases and receipt photos are stored locally. SpendLens does not require a bank connection or automatically sync your purchases to the cloud.
+
+GERMAN AND ENGLISH
+Change the app language in iOS Settings. Purchases are recorded in EUR.
+
+Explore SpendLens with built-in sample data without signing in.

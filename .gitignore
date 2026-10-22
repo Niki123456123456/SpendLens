@@ -49,3 +49,7 @@ yarn-error.*
 # Local Swift module checks
 modules/**/.build/
 modules/**/.swiftpm/
+
+# CI caches and release receipts
+.npm/
+/release/

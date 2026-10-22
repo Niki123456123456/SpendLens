@@ -1,0 +1,15 @@
+SpendLens 1.0.0 — App Review notes (draft; verify the release build before submission)
+
+Core features work without signing in. On first launch, choose "Try with sample data" on the Overview screen to explore sample receipts. Tabs: Overview, Receipts, Insights, Profile.
+
+To enter a real purchase without an account: Overview > Scan receipt > Enter purchase manually. Enter the retailer, date (YYYY-MM-DD), EUR receipt total and item details, then save. The receipt and monthly insights are available immediately. Receipts are stored locally; the Profile tab offers JSON export on iOS.
+
+The German and English UI follows iOS per-app language settings.
+
+The optional "Continue with ChatGPT" connection provides access to an existing third-party ChatGPT account, only for AI receipt reading. It is not required to use local receipt management. The user must explicitly authorize eligible ChatGPT plan usage. Receipt images are sent directly to OpenAI only after choosing "Read with AI". No account credentials are embedded in the app or in these notes.
+
+Before submitting:
+- Verify the optional production ChatGPT sign-in and AI-reading flow using an eligible account. A successful check has not yet been recorded.
+- Supply a legitimate review contact name, telephone number and email in App Store Connect.
+- Complete privacy declarations based on OpenAI's actual retention and processing terms; do not declare "Data Not Collected" merely because local storage is used.
+- Do not claim the AI feature was verified unless it was actually tested.

@@ -1,0 +1,21 @@
+SpendLens — data inventory for App Store privacy declarations (draft, not a published privacy policy)
+
+Local processing:
+- Purchase history: retailers, branch addresses, dates, items, quantities, prices, categories and totals.
+- User-selected receipt images, retained on the device until the purchase is deleted.
+- Optional account metadata associates local profiles with a ChatGPT connection.
+- ChatGPT tokens are stored by the native module in the device Keychain.
+- JSON exports contain purchase data and references; they exclude images, credentials and device paths. Sharing happens only when the user initiates export.
+
+External processing:
+- Optional ChatGPT sign-in exchanges authentication information with OpenAI.
+- Optional AI reading transfers the selected receipt image and the extraction instructions to OpenAI. Receipt images may include purchase history, addresses, payment details or other personal information printed on the receipt.
+- For the native iOS app, this traffic goes directly to OpenAI. A SpendLens backend is not used by that path.
+
+Unresolved publisher facts:
+- Public privacy-policy URL, support URL and contact email.
+- Publisher legal identity, applicable contact information, regions and trader status.
+- Applicable OpenAI data-retention terms and how they affect the App Store privacy questionnaire.
+- Third-party account revocation/deletion guidance and legally required user rights, based on the publisher's actual situation.
+
+No advertising, analytics SDK, bank connection or automatic receipt cloud sync is configured in this repository. Confirm the production build and third-party behavior before making declarations to Apple.

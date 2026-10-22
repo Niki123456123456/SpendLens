@@ -69,6 +69,13 @@
     "locales": {
       "de": "./locales/de.json",
       "en": "./locales/en.json"
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b49cf5cf-eecb-46ed-ae72-c2b986b2361a"
+      }
+    },
+    "owner": "niki123456123456"
   }
 }

@@ -262,5 +262,8 @@
   "Ungültige oder unvollständige Daten. Bitte Eingaben prüfen.": "Invalid or incomplete data. Please check your entries.",
   "Die Anfrage konnte nicht verarbeitet werden.": "Could not process the request.",
   "Die lokalen Einkaufsdaten enthalten ungültige Verknüpfungen.": "The local purchase data contains invalid references.",
-  "Bitte ein gültiges Datum eingeben.": "Please enter a valid date."
+  "Bitte ein gültiges Datum eingeben.": "Please enter a valid date.",
+  "Hilfe und Datenschutz": "Help and privacy",
+  "Support öffnen": "Open support",
+  "Datenschutzerklärung öffnen": "Open privacy policy"
 }

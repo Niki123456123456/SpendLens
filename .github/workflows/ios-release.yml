@@ -1,0 +1,77 @@
+name: iOS build and App Store Connect upload
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CI: '1'
+  EXPO_NO_TELEMETRY: '1'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --no-audit
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+
+  ios-release:
+    name: Build iOS on EAS and upload this build to Apple
+    needs: validate
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    concurrency:
+      group: ios-app-store
+      cancel-in-progress: false
+    env:
+      EXPO_PROJECT_ID: b49cf5cf-eecb-46ed-ae72-c2b986b2361a
+      EXPO_OWNER: niki123456123456
+      EXPO_APPLE_TEAM_ID: JKD484739B
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      ASC_APP_ID: ${{ secrets.ASC_APP_ID }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_API_KEY_PATH: ${{ runner.temp }}/spendlens-app-store-key.p8
+      CI_COMMIT_SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --no-audit
+      - name: Write App Store Connect key to the temporary runner directory
+        env:
+          ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
+        run: |
+          umask 077
+          printf '%s' "$ASC_API_KEY_P8" > "$ASC_API_KEY_PATH"
+      - name: Build and upload to App Store Connect
+        run: node scripts/ci/ios-release.mjs
+      - name: Remove temporary Apple API key
+        if: always()
+        run: rm -f "$ASC_API_KEY_PATH"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: ios-build-${{ github.run_id }}
+          path: release/ios-build.json
+          if-no-files-found: ignore
+          retention-days: 14

@@ -8,7 +8,7 @@ import { prepareSignIn, SignInAttempt } from '../../lib/api';
 import { hasDirectOpenAI, nativeBuildMessage } from '../../lib/direct-openai';
 import { shareReceiptExport } from '../../lib/export';
 export default function Account() {
-  const { t, errorText, count } = useTranslation();
+  const { t, errorText, count, language } = useTranslation();
   const { ledger, session, demo, loading, error: storageError, login, logout, startDemo } = useStore();
   const [exporting, setExporting] = useState(false);
   const exportBusy = useRef(false);
@@ -66,6 +66,11 @@ export default function Account() {
         {!attempt && !requiresBuild && <Button title={t('Verbindung erneut prüfen')} secondary onPress={() => { setAttempt(undefined); setRevision(value => value + 1); }} />}
         <Button title={demo ? t('Zurück zu meinen lokalen Daten') : t('Mit Beispieldaten ausprobieren')} secondary onPress={() => { void action(demo ? logout : startDemo); }} />
       </>}
+    </Card>
+    <Card>
+      <Text style={{ color: colors.ink, fontWeight: '700', fontSize: 20 }}>{t('Hilfe und Datenschutz')}</Text>
+      <Button title={t('Support öffnen')} secondary icon="help-circle-outline" onPress={() => { void action(async () => { await Linking.openURL(`https://niki123456123456.github.io/SpendLens/${language === 'en' ? 'en/' : ''}#support`); }); }} />
+      <Button title={t('Datenschutzerklärung öffnen')} secondary icon="document-text-outline" onPress={() => { void action(async () => { await Linking.openURL(`https://niki123456123456.github.io/SpendLens/${language === 'en' ? 'en/' : ''}privacy.html`); }); }} />
     </Card>
     <Card><View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}><Ionicons name="shield-checkmark-outline" size={22} color={colors.green} /><Text style={{ color: colors.ink, fontWeight: '700', fontSize: 17 }}>{t('Deine Daten, dein Gerät')}</Text></View>
       <Body>{iPhone ? t('Einkäufe und Bonbilder werden lokal gespeichert. Erst mit „Mit KI auslesen“ wird das ausgewählte Foto direkt vom iPhone an OpenAI übertragen.') : t('Einkäufe und Bonbilder werden lokal gespeichert. Erst mit „Mit KI auslesen“ wird das Foto über deinen SpendLens-Server an OpenAI übertragen.')}</Body>

@@ -1,0 +1,1 @@
+Kassenbon,Ausgaben,Einkauf,Haushaltsbuch,Belege,Budget,Quittung,Bon,Scanner

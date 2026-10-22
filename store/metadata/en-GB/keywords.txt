@@ -1,0 +1,1 @@
+receipt,spending,purchases,expenses,budget,scanner,shopping,tracker,organizer

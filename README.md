@@ -2,6 +2,12 @@
 
 Eine lokale Kassenbon-App mit **React Native, Expo SDK 57, TypeScript und Expo Router** für iOS, Android und Web. Nach dem verlinkten [Konzept](https://chatgpt.com/c/6ad90c24-1824-83ed-bc95-ef41a09a4f62): Shop → Branch → Purchase → PurchaseItem. Kein Produktkatalog, kein gespeichertes `line_number` oder `line_total`.
 
+## iOS-Pipeline und Store-Seite
+
+GitHub Actions prüft Änderungen auf `main` und baut nach erfolgreichen Pushes eine signierte iOS-Version mit EAS. Anschließend wird genau dieser Build zu App Store Connect / TestFlight hochgeladen. Für die Einrichtung der Secrets, Signierdaten und der erstmaligen App-Review-Einreichung siehe [iOS-Auslieferung](docs/ios-release.md).
+
+Die deutsche und englische Support-/Datenschutz-Website liegt unter `site/` und wird durch einen eigenen GitHub-Pages-Workflow veröffentlicht. Store-Texte und Review-Vorbereitungen liegen unter `store/`.
+
 ## Sprachen: Deutsch und Englisch
 
 SpendLens übernimmt die bevorzugte App-Sprache aus den Systemeinstellungen. Auf iOS: **Einstellungen → Apps → SpendLens → Sprache / Bevorzugte Sprache → Deutsch oder Englisch**. Im Profil führt „Sprache in den iOS-Einstellungen ändern“ direkt zu den App-Einstellungen. Fehlt die Sprachwahl, zuerst unter Allgemein → Sprache & Region eine zweite Sprache hinzufügen. Android unterstützt ebenfalls die systemeigene App-Sprachwahl; im Web gelten die Browsersprachen. Nicht unterstützte Sprachen verwenden Englisch als Rückfall.

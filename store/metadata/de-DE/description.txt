@@ -1,0 +1,23 @@
+Mehr Überblick. Weniger Zettel.
+
+SpendLens hilft dir, deine täglichen Einkäufe übersichtlich festzuhalten. Fotografiere einen Kassenbon oder erfasse ihn von Hand. Prüfe Händler, Filiale, Datum und Artikel und speichere deinen Einkauf auf deinem Gerät.
+
+DEINE EINKÄUFE AN EINEM ORT
+• Kassenbons fotografieren oder aus der Fotomediathek auswählen
+• Einkäufe auch ohne Konto manuell erfassen
+• Mengen, Einzelpreise, Rabatte und Kategorien prüfen
+• Nach Händler, Artikel oder Datum suchen
+• Monatliche Ausgaben nach Kategorien auswerten
+• Originalfotos zu deinen Einkäufen aufbewahren
+• Kassenbons unter iOS als JSON exportieren
+
+OPTIONAL MIT KI
+Verbinde dein berechtigtes ChatGPT-Konto, um Bonfotos auslesen und Artikel kategorisieren zu lassen. Ein ausgewähltes Bonfoto wird erst nach deiner Aktion an OpenAI übertragen. Für diese Funktion ist eine entsprechende ChatGPT-Freigabe erforderlich. Prüfe alle erkannten Angaben vor dem Speichern.
+
+DEINE DATEN AUF DEINEM GERÄT
+Einkäufe und Bonbilder werden lokal gespeichert. SpendLens benötigt keine Bankverbindung und führt keinen automatischen Cloud-Abgleich deiner Einkäufe durch.
+
+DEUTSCH UND ENGLISCH
+Die App-Sprache lässt sich über die iOS-App-Einstellungen ändern. Beträge werden in EUR erfasst.
+
+Mit den integrierten Beispieldaten kannst du SpendLens ohne Anmeldung ausprobieren.
