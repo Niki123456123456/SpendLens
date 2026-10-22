@@ -2,6 +2,31 @@
 
 Eine lokale Kassenbon-App mit **React Native, Expo SDK 57, TypeScript und Expo Router** für iOS, Android und Web. Nach dem verlinkten [Konzept](https://chatgpt.com/c/6ad90c24-1824-83ed-bc95-ef41a09a4f62): Shop → Branch → Purchase → PurchaseItem. Kein Produktkatalog, kein gespeichertes `line_number` oder `line_total`.
 
+## iPhone: ChatGPT-Anmeldung ohne SpendLens-Backend
+
+Der native iPhone-Build enthält ein eigenes Swift-Modul in `modules/spendlens-openai`. Anmeldung, Token-Erneuerung und KI-Auslesen gehen direkt an OpenAI. Dafür muss kein SpendLens-Server laufen und kein API-Schlüssel hinterlegt werden.
+
+```sh
+npm install
+npm run ios -- --device
+# Entwicklungsserver später erneut starten:
+npm run native:start
+```
+
+Für die Geräteinstallation muss deine Apple-ID in Xcode eingerichtet und das iPhone gekoppelt sein; gegebenenfalls Entwicklermodus auf dem Gerät aktivieren. `app.json` enthält das vorhandene Apple-Team für diese lokale Installation. Andere Entwickler müssen ihre eigene Team-ID verwenden. EAS-Builds bleiben über `eas.json` möglich.
+
+**Lokale Build-Voraussetzung:** Expo SDK 57 benötigt laut [Expo-Anforderungen](https://docs.expo.dev/versions/v57.0.0/#support-for-android-and-ios-versions) Xcode **26.4 oder neuer**. `npm run ios` prüft diese Voraussetzung vor dem Build. Nach einem Xcode-Update Xcode einmal öffnen und unter Settings → Locations als Command Line Tools auswählen.
+
+Für **Xcode 27 und iOS 27** aktiviert `app.json` außerdem `expo-build-properties` mit `ios.enableSceneSupport: true`. Das ist bei SDK 57 erforderlich, damit der App-Start den von iOS 27 verlangten Scene-Lebenszyklus verwendet. Änderungen daran mit Expo Prebuild generieren; `ios/` nicht von Hand bearbeiten. Siehe [Expo-Anleitung für SDK 57 mit Xcode 27](https://github.com/expo/fyi/blob/main/ios-scene-lifecycle.md#staying-on-sdk-57-with-xcode-27).
+
+**Geräteprüfung am 22.10.2026:** Release-Build mit Xcode 27.1 erfolgreich signiert, auf dem iPhone 12 Pro mit iOS 27 installiert und gestartet. Der aktive App-Prozess und der sichtbare Überblick-Bildschirm wurden geprüft. JavaScript ist eingebettet; für diesen installierten Build ist kein Metro-Server nötig. Die echte ChatGPT-Anmeldung und das KI-Auslesen bleiben separat auf dem Gerät zu prüfen.
+
+Profil → „Continue with ChatGPT“ öffnet das sichere iOS-Anmeldefenster. Ein kurzlebiger Listener bindet ausschließlich `127.0.0.1` auf dem iPhone und empfängt den dokumentierten OAuth-Callback. Der anschließende App-Rücksprung enthält nur eine zufällige Abschlussmarkierung. PKCE, State, Nonce und die ID-Token-Signatur samt Issuer, Audience, Ablauf und Kontoidentität werden nativ geprüft. Ausgegebene Client-IDs werden vor dem Token-Austausch gespeichert und wiederverwendet. Tokens verlassen das native Modul nicht und liegen im gerätegebundenen iOS-Schlüsselbund; JavaScript erhält nur Kontometadaten. Abmelden entfernt die Tokens, behält aber die lokale Registrierung. Eine OpenAI-Freigabe wird dadurch nicht widerrufen.
+
+Bilder werden erst nach „Mit KI auslesen“ direkt an OpenAI gesendet. Berechtigungen und verfügbare Modelle werden vom verbundenen Konto gelesen. Fehlende Berechtigung, abgebrochene Streams und API-Fehler werden angezeigt. Es gibt keinen automatischen API-Key-Fallback.
+
+**Status:** Experimentelle iOS-Umsetzung des [dokumentierten Loopback-Flows](https://developers.openai.com/siwc/token-sharing-open-source/sign-in). Die Dokumentation bestätigt diesen konkreten iOS-Aufbau nicht ausdrücklich. Native Tests prüfen unter anderem Signaturen, manipulierte Rückgaben, Wiederholung, Token-Rotation und Abbruch; die vollständige Anmeldung mit einem echten Konto muss auf dem iPhone noch geprüft werden. Es wurden keine kostenpflichtigen KI-Anfragen ausgeführt.
+
 ## Expo Go auf einem echten iPhone
 
 Das Projekt ist auf **SDK 57** abgestimmt, passend zur vom Nutzer bestätigten Expo-Go-Version auf seinem iPhone. Maßgeblich ist die SDK-Angabe der tatsächlich installierten Expo-Go-App. Die iOS-Version des Telefons ist nicht die Expo-SDK-Version.
@@ -12,7 +37,7 @@ npm run phone
 npm run phone:tunnel
 ```
 
-Expo Go öffnen und den QR-Code des aktuellen Servers scannen. Bei SDK-Upgrades zuerst prüfen, welche SDK-Version die tatsächlich installierte Expo-Go-App unterstützt. Ein erfolgreicher iOS-Bundle-Export belegt nicht die Kompatibilität mit einer beliebigen Expo-Go-Version.
+Expo Go erlaubt manuelle Erfassung und Beispieldaten. Die direkte ChatGPT-Anmeldung benötigt das eigene native Modul und deshalb einen installierten SpendLens-Development-Build. In Expo Go zeigt das Profil diesen Hinweis ohne Backend-Verbindungsversuch. Expo Go öffnen und den QR-Code des aktuellen Servers scannen. Bei SDK-Upgrades zuerst prüfen, welche SDK-Version die tatsächlich installierte Expo-Go-App unterstützt. Ein erfolgreicher iOS-Bundle-Export belegt nicht die Kompatibilität mit einer beliebigen Expo-Go-Version.
 
 ## Starten
 
@@ -55,7 +80,7 @@ Diese Befehle starten Expo mit dem gewünschten Ziel. Für Kamera und den eigene
 
 Die Integration folgt den am 21.10.2026 abgerufenen **official OpenAI documentation**. Zugang und Kontoberechtigung müssen mit einem echten Konto überprüft werden. In dieser Umgebung wurden weder echte Anmeldedaten verwendet noch kostenpflichtige Modellanfragen ausgeführt.
 
-### 1. Lokaler Open-Source-/ChatGPT-Abo-Flow (Standard)
+### 1. Optionaler Desktop-/Web-Server
 
 `AUTH_MODE=local-plan` implementiert den Flow aus dem [verlinkten Cookbook](https://developers.openai.com/cookbook/articles/sign-in-with-chatgpt) und der [Registrierungsdokumentation](https://developers.openai.com/siwc/token-sharing-open-source/sign-in):
 
@@ -67,11 +92,11 @@ Die Integration folgt den am 21.10.2026 abgerufenen **official OpenAI documentat
 - [Modellkatalog](https://developers.openai.com/siwc/token-sharing-open-source/models-and-inference) kommt vom angemeldeten Konto. Standardmäßig wird das erste sichtbare Modell mit nicht ausgeschlossener Bildunterstützung benutzt. Mit `OPENAI_MODEL` kann ein verfügbarer, bildfähiger Slug festgelegt werden. Fehlende Bildunterstützung wird als API-Fehler angezeigt, nicht durch erfundene Daten ersetzt.
 - Responses API mit `store:false`, `stream:true` und JSON-Schema. Nur ein Stream mit `response.completed` wird übernommen. Fehler, Limits oder ein abgebrochener Stream werden verworfen.
 
-**Mobile Grenze:** Die dokumentierte dynamische Registrierung verlangt einen HTTP-Loopback-Callback auf `127.0.0.1`. Ein iPhone/Android-Gerät kann diesen Server auf deinem Computer nicht über seine eigene Loopback-Adresse erreichen. Deshalb startet die native App diesen lokalen Flow nicht. Diese Implementierung ist keine Behauptung, dass der Desktop-Flow unverändert für eine eigenständige App-Store-App unterstützt wird.
+**iPhone:** Der oben beschriebene native Build betreibt den Listener direkt auf dem Gerät. Er verwendet diesen Desktop-Server nicht. Android und Web behalten ihren bisherigen Serverweg.
 
 `.local/host.json` und `.local/registration.json` werden mit restriktiven Dateirechten geschrieben und von Git ausgeschlossen. Der lokale Modus ist für ein verbundenes ChatGPT-Konto pro Serverinstallation ausgelegt. OpenAI-Zugangstokens, Refresh-Tokens und App-Sitzungen bleiben ausschließlich im Arbeitsspeicher des Servers; nach einem Serverneustart erneut anmelden. Abmelden löscht die SpendLens-Sitzung, widerruft aber keine Freigabe in ChatGPT. Diese lässt sich in ChatGPT verwalten.
 
-### 2. Registrierter OAuth-Client für native/hosted Builds
+### 2. Optionaler registrierter OAuth-Client für den Server
 
 `AUTH_MODE=registered` verwendet den [offiziellen Identity-OAuth-Flow](https://developers.openai.com/siwc/website). Dafür benötigst du einen tatsächlich von OpenAI bereitgestellten Client und einen exakt registrierten HTTPS-Callback. Die Dokumentation beschreibt diesen Zugang als begrenzt verfügbar.
 
@@ -97,7 +122,7 @@ Für öffentlichen Mehrbenutzerbetrieb sind ein persistenter Sitzungs-/Transakti
 - Artikel bleiben historische Bonpositionen mit eigenem Namen/Preis/Kategorie.
 - Gesamtbeträge in Integer-Cent; Einzelpreise in Integer-Mikro-Euro, damit z. B. Kraftstoffpreise oder Dezimalmengen nicht vorzeitig auf Cent gerundet werden. Berechnete Positionssummen werden nicht gespeichert.
 - Native Bilder werden aus dem Cache in das Dokumentverzeichnis kopiert; Web speichert Bilder als Data-URI. Beim Löschen wird das lokale Bild entfernt.
-- Bondaten liegen in AsyncStorage (Web: Browser-Speicher). Sie sind nicht zusätzlich durch die App verschlüsselt. Die App-Sitzung liegt nativ in SecureStore, im Web nur in `sessionStorage`.
+- Bondaten liegen in AsyncStorage (Web: Browser-Speicher). Sie sind nicht zusätzlich durch die App verschlüsselt. Auf dem iPhone liegen OAuth-Tokens ausschließlich im nativen Schlüsselbund-Modul, andere native Server-Sitzungen in SecureStore und Web-Sitzungen nur in `sessionStorage`.
 - Kein Cloud-Sync und keine automatische Sicherung. Löschen der App-/Browserdaten entfernt lokale Einkäufe. Der Browser hat begrenzten Speicher; ein Speicherfehler wird angezeigt und ein Einkauf erst nach erfolgreichem Schreiben als gespeichert behandelt.
 - Die aktuelle Version verarbeitet EUR-Kassenbons. Kategorien basieren auf Artikelpreisen und können sich durch Rabatte oder Rundung von der gedruckten Bonsumme unterscheiden.
 
@@ -109,7 +134,8 @@ src/components/  UI, Bonformular und Einkaufszeilen
 src/state/       Lokale Daten und Kontowechsel
 src/lib/         API, OAuth-App-Rückgabe, Bilder und Speicherung
 shared/receipt.ts  Datenmodell, Zod-Schema und Betragsberechnung
-server/          OAuth, Sitzungen, Token-Erneuerung und KI-Auslesen
+modules/spendlens-openai/  Native iPhone-Anmeldung, Schlüsselbund und direkte OpenAI-Anfragen
+server/          Optionaler Web-/Android-Server für OAuth und KI-Auslesen
 tests/           Datenmodell-, Sicherheits-, API- und Stream-Tests
 ```
 
@@ -119,6 +145,7 @@ tests/           Datenmodell-, Sicherheits-, API- und Stream-Tests
 npm run typecheck
 npm run lint
 npm test
+npm run test:native  # macOS mit Swift/Xcode
 npm run build:web
 npx expo export --platform ios --output-dir /tmp/spendlens-ios
 npx expo export --platform android --output-dir /tmp/spendlens-android

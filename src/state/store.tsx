@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import * as Crypto from 'expo-crypto';
 import { addReceipt, emptyLedger, Ledger, parseLedger, ReceiptDraft } from '../../shared/receipt';
-import { AsyncStorage, readSecret, writeSecret } from '../lib/storage';
+import { AsyncStorage, writeSecret } from '../lib/storage';
 import { demoLedger } from '../lib/demo';
-import { request, Session, SignInAttempt, signIn } from '../lib/api';
+import { endSession, restoreSession, Session, SignInAttempt, signIn } from '../lib/api';
 
 type Store = { ledger: Ledger; loading: boolean; error: string; session: Session | null; demo: boolean;
   login: (attempt: SignInAttempt) => Promise<void>; logout: () => Promise<void>; startDemo: () => Promise<void>;
@@ -28,8 +28,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   }
   useEffect(() => { (async () => {
     try {
-      const raw = await readSecret('spendlens.session');
-      const saved = raw ? JSON.parse(raw) as Session : null;
+      const saved = await restoreSession();
       const isDemo = !saved && await AsyncStorage.getItem('spendlens.demo') === 'true';
       await load(saved, isDemo);
     } catch { setError('Lokale Daten konnten nicht geladen werden. Bitte die App neu starten.'); }
@@ -47,9 +46,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     finally { busy.current = false; }
   }
   const value: Store = { ledger, loading, error, session, demo,
-    login: attempt => transition(async () => { const next = await signIn(attempt); if (next) { await load(next); await writeSecret('spendlens.session', JSON.stringify(next)); } }),
+    login: attempt => transition(async () => { const next = await signIn(attempt); if (next) { await load(next); if (next.transport !== 'ios-direct') await writeSecret('spendlens.session', JSON.stringify(next)); } }),
     logout: () => transition(async () => {
-      if (session) await request('/auth/logout', session.token, {}).catch(() => {});
+      if (session) await endSession(session);
       await load(null); await writeSecret('spendlens.session', null);
     }),
     startDemo: () => transition(() => load(null, true)),
