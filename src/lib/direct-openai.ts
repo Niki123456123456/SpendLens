@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import { requireOptionalNativeModule } from 'expo';
 import { Platform } from 'react-native';
 import { z } from 'zod';
@@ -12,7 +13,7 @@ type NativeOpenAI = {
 };
 const module = Platform.OS === 'ios' ? requireOptionalNativeModule<NativeOpenAI>('SpendLensOpenAI') : null;
 export const hasDirectOpenAI = Boolean(module);
-export const nativeBuildMessage = 'Die direkte ChatGPT-Anmeldung benötigt den nativen SpendLens-Development-Build. Expo Go enthält dieses iPhone-Modul nicht.';
+export const nativeBuildMessage = t('Die direkte ChatGPT-Anmeldung benötigt den nativen SpendLens-Development-Build. Expo Go enthält dieses iPhone-Modul nicht.');
 const sessionSchema = z.object({
   transport: z.literal('ios-direct'), token: z.literal(''),
   user: z.object({ id: z.string().regex(/^[a-f0-9]{64}$/), name: z.string(), email: z.string().optional() }),

@@ -1,0 +1,6 @@
+{
+  "ios": {
+    "NSCameraUsageDescription": "SpendLens uses the camera to photograph your receipts.",
+    "NSPhotoLibraryUsageDescription": "SpendLens needs access to selected receipt photos."
+  }
+}

@@ -9,7 +9,11 @@
     "ios": {
       "appleTeamId": "JKD484739B",
       "supportsTablet": true,
-      "bundleIdentifier": "app.spendlens.mobile"
+      "bundleIdentifier": "app.spendlens.mobile",
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
+        "CFBundleDevelopmentRegion": "en"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -27,18 +31,44 @@
     },
     "scheme": "spendlens",
     "plugins": [
-      ["expo-build-properties", { "ios": { "enableSceneSupport": true } }],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "enableSceneSupport": true
+          }
+        }
+      ],
       "expo-router",
       "expo-secure-store",
       [
         "expo-image-picker",
         {
-          "photosPermission": "SpendLens benötigt Zugriff auf ausgewählte Bonfotos.",
-          "cameraPermission": "SpendLens verwendet die Kamera zum Fotografieren deiner Kassenbons.",
+          "photosPermission": "SpendLens needs access to selected receipt photos.",
+          "cameraPermission": "SpendLens uses the camera to photograph your receipts.",
           "microphonePermission": false
         }
       ],
-      "expo-font"
-    ]
+      "expo-font",
+      [
+        "expo-localization",
+        {
+          "supportedLocales": {
+            "ios": [
+              "de",
+              "en"
+            ],
+            "android": [
+              "de",
+              "en"
+            ]
+          }
+        }
+      ]
+    ],
+    "locales": {
+      "de": "./locales/de.json",
+      "en": "./locales/en.json"
+    }
   }
 }

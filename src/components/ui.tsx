@@ -1,3 +1,4 @@
+import { useTranslation } from '../i18n';
 import React from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, TextInputProps, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,7 +18,10 @@ export function Button({ title, onPress, secondary = false, icon, disabled = fal
 export function Screen({ children }: { children: React.ReactNode }) { return <SafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1, backgroundColor: colors.bg }}><ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.screen}>{children}</ScrollView></SafeAreaView>; }
 export function Field({ label, ...props }: TextInputProps & { label: string }) { return <View style={{ gap: 7, flexGrow: 1 }}><Label>{label}</Label><TextInput accessibilityLabel={label} placeholderTextColor="#A0ADAA" {...props} style={[styles.input, props.style]} /></View>; }
 export function Notice({ text, bad = false }: { text: string; bad?: boolean }) { return <View accessibilityRole="alert" style={{ padding: 14, backgroundColor: bad ? '#FCEBE6' : colors.mint, borderRadius: 12 }}><Text style={{ color: bad ? '#9B4234' : colors.green, lineHeight: 21, fontSize: 13 }}>{text}</Text></View>; }
-export function Loading() { return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.bg }}><ActivityIndicator color={colors.green} /><Body>SpendLens wird geladen …</Body></View>; }
+export function Loading() {
+  const { t } = useTranslation();
+  return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.bg }}><ActivityIndicator color={colors.green} /><Body>{t('SpendLens wird geladen …')}</Body></View>;
+}
 export const styles = StyleSheet.create({
   screen: { padding: 24, gap: 24, paddingBottom: 44, maxWidth: 760, width: '100%', alignSelf: 'center' },
   title: { fontSize: 30, fontWeight: '700', letterSpacing: -1.1, color: colors.ink },

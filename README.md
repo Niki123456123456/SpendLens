@@ -2,6 +2,16 @@
 
 Eine lokale Kassenbon-App mit **React Native, Expo SDK 57, TypeScript und Expo Router** für iOS, Android und Web. Nach dem verlinkten [Konzept](https://chatgpt.com/c/6ad90c24-1824-83ed-bc95-ef41a09a4f62): Shop → Branch → Purchase → PurchaseItem. Kein Produktkatalog, kein gespeichertes `line_number` oder `line_total`.
 
+## Sprachen: Deutsch und Englisch
+
+SpendLens übernimmt die bevorzugte App-Sprache aus den Systemeinstellungen. Auf iOS: **Einstellungen → Apps → SpendLens → Sprache / Bevorzugte Sprache → Deutsch oder Englisch**. Im Profil führt „Sprache in den iOS-Einstellungen ändern“ direkt zu den App-Einstellungen. Fehlt die Sprachwahl, zuerst unter Allgemein → Sprache & Region eine zweite Sprache hinzufügen. Android unterstützt ebenfalls die systemeigene App-Sprachwahl; im Web gelten die Browsersprachen. Nicht unterstützte Sprachen verwenden Englisch als Rückfall.
+
+Oberfläche, Kategorien, Händlertypen, Fehlermeldungen und Kamera-/Fotoberechtigungen sind übersetzt. Datums- und Betragsanzeigen folgen der App-Sprache; die Währung bleibt EUR. Gespeicherte Bontexte, Händlernamen, Adressen und Einheiten bleiben unverändert. Übersetzungen liegen in `src/i18n/en.json`, die deutschen Ausgangstexte dienen als Schlüssel. `src/i18n/core.ts` enthält Sprachauflösung, Formatierung und Pluralformen.
+
+**Neuer nativer Build erforderlich:** Die Sprachwahl und übersetzten Systemdialoge sind Bestandteil des installierten Builds. Ein Metro-Neustart oder OTA-Update reicht dafür nicht. Bei einem vorhandenen generierten `ios/`-Ordner vor dem nächsten Build `npx expo prebuild --platform ios` ausführen; mit EAS ohne eingecheckte native Ordner wird die Konfiguration beim Build generiert. Native Ordner nicht von Hand bearbeiten. Expo Go kann die Übersetzungen anzeigen, bietet aber keine eigenen SpendLens-App-Einstellungen.
+
+Manuell auf einem neuen iOS-Build prüfen: Deutsch und Englisch jeweils in den App-Einstellungen auswählen, danach Tabs, manuelle Bonerfassung, Kategorien, Detailansicht und Auswertung öffnen. Auch Datum, EUR-Beträge und Kamera-Berechtigungsdialog prüfen. Sprachwechsel darf vorhandene Einkäufe nicht verändern.
+
 ## iPhone: ChatGPT-Anmeldung ohne SpendLens-Backend
 
 Der native iPhone-Build enthält ein eigenes Swift-Modul in `modules/spendlens-openai`. Anmeldung, Token-Erneuerung und KI-Auslesen gehen direkt an OpenAI. Dafür muss kein SpendLens-Server laufen und kein API-Schlüssel hinterlegt werden.

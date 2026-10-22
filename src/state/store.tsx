@@ -1,3 +1,4 @@
+import { t, errorText } from '../i18n';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import * as Crypto from 'expo-crypto';
 import { addReceipt, emptyLedger, Ledger, parseLedger, ReceiptDraft } from '../../shared/receipt';
@@ -31,16 +32,16 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       const saved = await restoreSession();
       const isDemo = !saved && await AsyncStorage.getItem('spendlens.demo') === 'true';
       await load(saved, isDemo);
-    } catch { setError('Lokale Daten konnten nicht geladen werden. Bitte die App neu starten.'); }
+    } catch { setError(t('Lokale Daten konnten nicht geladen werden. Bitte die App neu starten.')); }
     finally { setLoading(false); }
   })(); }, []);
   async function transition(work: () => Promise<void>) {
     if (busy.current) return;
     busy.current = true; setLoading(true); setError('');
-    try { await work(); } catch (e) { setError(e instanceof Error ? e.message : 'Aktion konnte nicht abgeschlossen werden.'); throw e; } finally { setLoading(false); busy.current = false; }
+    try { await work(); } catch (e) { setError(e instanceof Error ? errorText(e.message) : t('Aktion konnte nicht abgeschlossen werden.')); throw e; } finally { setLoading(false); busy.current = false; }
   }
   async function commit(next: Ledger) {
-    if (busy.current || !writable.current) throw new Error('Die lokalen Daten sind gerade nicht verfügbar.');
+    if (busy.current || !writable.current) throw new Error(t('Die lokalen Daten sind gerade nicht verfügbar.'));
     busy.current = true;
     try { await AsyncStorage.setItem(key.current, JSON.stringify(next)); setLedger(next); }
     finally { busy.current = false; }

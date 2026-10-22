@@ -1,0 +1,6 @@
+{
+  "ios": {
+    "NSCameraUsageDescription": "SpendLens verwendet die Kamera zum Fotografieren deiner Kassenbons.",
+    "NSPhotoLibraryUsageDescription": "SpendLens benötigt Zugriff auf ausgewählte Bonfotos."
+  }
+}
