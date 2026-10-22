@@ -6,6 +6,7 @@
 - `scripts/ci/ios-release.mjs`: prüft nötige Variablen, wartet auf den fertigen Build, übergibt seine ID an EAS Submit und stellt danach die ursprüngliche `eas.json` wieder her. Es wird nie `--latest` verwendet.
 - EAS-Projekt: https://expo.dev/accounts/niki123456123456/projects/spendlens (`b49cf5cf-eecb-46ed-ae72-c2b986b2361a`).
 - Bundle-ID: `app.spendlens.mobile`, Apple-Team: `JKD484739B`.
+- App Store Connect: [SpendLens](https://appstoreconnect.apple.com/apps/6825931058/distribution), numerische Apple-ID `6825931058`, primäre Sprache Deutsch, SKU `spendlens-ios`. Deutsche Versionstexte und Support-URL sind gespeichert.
 - `eas.json`: Store-Distribution, remote verwaltete fortlaufende Buildnummern, Produktionsumgebung und remote verwaltete Signierdaten.
 - `assets/icon.svg` und `assets/icon.png`: SpendLens-Logo, 1024 × 1024, PNG ohne Alphakanal.
 - `store/metadata/`: deutsche und englische Store-Texte. `store/review-notes.txt` und `store/privacy-data-inventory.txt`: Vorbereitungen für die Einreichung.
@@ -15,8 +16,8 @@
 
 ## Einmalige Einrichtung
 
-1. Freischaltung der verlängerten Apple-Developer-Mitgliedschaft abwarten. Der Herausgeber hat die Verlängerung am 22.10.2026 bestätigt; App Store Connect hat danach auch nach erneuter Anmeldung die App-Anlage weiterhin mit „Mitgliedschaft … abgelaufen“ blockiert. Keine erneute Zahlung auslösen.
-2. In App Store Connect eine iOS-App namens SpendLens mit primärer Sprache Deutsch und Bundle-ID `app.spendlens.mobile` anlegen. SKU: `spendlens-ios`. Falls die Bundle-ID fehlt, diese im Developer-Portal für das richtige Team registrieren. Die numerische Apple-ID der neu angelegten App wird `ASC_APP_ID`.
+1. Apple-Developer-Mitgliedschaft: Die bestätigte Verlängerung ist inzwischen freigeschaltet; die App-Anlage war am 22.10.2026 erfolgreich.
+2. App ist angelegt. `ASC_APP_ID` auf `6825931058` setzen.
 3. Einen ersten Produktionsbuild interaktiv konfigurieren: `npx eas-cli@latest build --platform ios --profile production`. Dabei die Distribution-Zertifikate und Provisioning-Profile bei EAS einrichten. Keine Zertifikate oder privaten Schlüssel committen.
 4. Einen passenden App Store Connect API-Schlüssel einrichten. Schlüssel-ID, Issuer-ID und den `.p8`-Schlüssel sicher aufbewahren. Für EAS Build vorhandene Signierdaten verwenden; für EAS Submit muss der Schlüssel zur App berechtigen.
 5. Unter Repository → Settings → Secrets and variables → Actions folgende Repository-Secrets setzen:

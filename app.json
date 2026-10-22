@@ -12,7 +12,12 @@
       "bundleIdentifier": "app.spendlens.mobile",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
-        "CFBundleDevelopmentRegion": "en"
+        "CFBundleDevelopmentRegion": "en",
+        "CFBundleLocalizations": [
+          "de",
+          "en"
+        ],
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {

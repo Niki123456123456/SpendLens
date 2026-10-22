@@ -46,7 +46,6 @@ jobs:
       ASC_APP_ID: ${{ secrets.ASC_APP_ID }}
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-      ASC_API_KEY_PATH: ${{ runner.temp }}/spendlens-app-store-key.p8
       CI_COMMIT_SHA: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v7
@@ -62,12 +61,13 @@ jobs:
           ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
         run: |
           umask 077
-          printf '%s' "$ASC_API_KEY_P8" > "$ASC_API_KEY_PATH"
+          printf '%s' "$ASC_API_KEY_P8" > "$RUNNER_TEMP/spendlens-app-store-key.p8"
+          printf 'ASC_API_KEY_PATH=%s/spendlens-app-store-key.p8\n' "$RUNNER_TEMP" >> "$GITHUB_ENV"
       - name: Build and upload to App Store Connect
         run: node scripts/ci/ios-release.mjs
       - name: Remove temporary Apple API key
         if: always()
-        run: rm -f "$ASC_API_KEY_PATH"
+        run: rm -f "$RUNNER_TEMP/spendlens-app-store-key.p8"
       - uses: actions/upload-artifact@v7
         if: always()
         with:
