@@ -6,13 +6,16 @@
 - `scripts/ci/ios-release.mjs`: prüft nötige Variablen, wartet auf den fertigen Build, übergibt seine ID an EAS Submit und stellt danach die ursprüngliche `eas.json` wieder her. Es wird nie `--latest` verwendet.
 - EAS-Projekt: https://expo.dev/accounts/niki123456123456/projects/spendlens (`b49cf5cf-eecb-46ed-ae72-c2b986b2361a`).
 - Bundle-ID: `app.spendlens.mobile`, Apple-Team: `JKD484739B`.
-- App Store Connect: [SpendLens](https://appstoreconnect.apple.com/apps/6825931058/distribution), numerische Apple-ID `6825931058`, primäre Sprache Deutsch, SKU `spendlens-ios`. Deutsche Versionstexte und Support-URL sind gespeichert.
+- App Store Connect: [SpendLens](https://appstoreconnect.apple.com/apps/6825931058/distribution), numerische Apple-ID `6825931058`, primäre Sprache Deutsch, SKU `spendlens-ios`. Deutsche und englische Versionstexte, Untertitel, Support- und Datenschutz-URLs sind gespeichert; Kategorie Finanzen. Der englische Name lautet „SpendLens: Receipt Organizer“, weil „SpendLens“ für diese Sprache bereits vergeben ist.
 - `eas.json`: Store-Distribution, remote verwaltete fortlaufende Buildnummern, Produktionsumgebung und remote verwaltete Signierdaten.
 - `assets/icon.svg` und `assets/icon.png`: SpendLens-Logo, 1024 × 1024, PNG ohne Alphakanal.
 - `store/metadata/`: deutsche und englische Store-Texte. `store/review-notes.txt` und `store/privacy-data-inventory.txt`: Vorbereitungen für die Einreichung.
 - `site/`: statische deutsche/englische Support- und Datenschutzseite. `.github/workflows/pages.yml` veröffentlicht nur diesen Ordner über GitHub Pages.
 - Expo-Robot „SpendLens GitHub Actions“ mit Developer-Rolle eingerichtet; sein Token ist ausschließlich als verschlüsseltes Repository-Secret `EXPO_TOKEN` gespeichert. Die Rolle gilt für alle Projekte des Expo-Kontos und der Zugang bleibt bis zum Widerruf aktiv.
-- Zwölf echte native Store-Screenshots unter `store/screenshots/`: Deutsch/Englisch, iPhone/iPad, jeweils Übersicht, Auswertung und Bon. Der lokale iOS-Release-Simulator-Build sowie die Sprachwahl in den iOS-App-Einstellungen wurden erfolgreich geprüft. Lint, Typecheck und 19 Tests sind erfolgreich.
+- 18 echte native Store-Screenshots unter `store/screenshots/`: Deutsch/Englisch, iPhone groß/mittel und iPad, jeweils Übersicht, Auswertung und Bon. Der lokale iOS-Release-Simulator-Build sowie die Sprachwahl in den iOS-App-Einstellungen wurden erfolgreich geprüft. Lint, Typecheck und 19 Tests sind erfolgreich.
+- GitHub-Lauf nach Korrektur des Runner-Kontexts: `validate` erfolgreich; der Release-Schritt stoppt vor EAS mit fehlenden `ASC_KEY_ID`/`ASC_ISSUER_ID`. `EXPO_TOKEN` und `ASC_APP_ID` sind als Repository-Secrets gespeichert. Der `.p8`-Schlüssel fehlt ebenfalls noch. Apple verlangt zunächst die Freischaltung unter Benutzer und Zugriffsrechte → Integration → App Store Connect-API → Zugriff anfordern.
+- Der erste signierte Build wartet auf die persönliche Apple-Anmeldung des Herausgebers im EAS-CLI. Noch kein Store-Build hochgeladen und noch keine App-Review-Einreichung erfolgt. Der Screenshot-Upload im Browser wartet auf die Chrome-Erweiterungsberechtigung „Zugriff auf Datei-URLs zulassen“.
+- Der Altersfreigabe-Fragebogen wurde anhand der vorhandenen Funktionen ausgefüllt und gespeichert: Apple berechnet 4+ (mit regionalen Äquivalenten); keine Einstufung als Kinder-App. Inhaltsrechte, Preis/Verfügbarkeit und die endgültige App-Datenschutzerklärung bei Apple sind vor der Einreichung noch zu vervollständigen.
 
 ## Einmalige Einrichtung
 
@@ -25,7 +28,7 @@
 | Secret | Inhalt |
 | --- | --- |
 | `EXPO_TOKEN` | Bereits eingerichtet: Token des Expo-Robots für GitHub Actions |
-| `ASC_APP_ID` | Numerische Apple-ID der SpendLens-App in App Store Connect |
+| `ASC_APP_ID` | Bereits eingerichtet: `6825931058` |
 | `ASC_KEY_ID` | Schlüssel-ID des App Store Connect API-Schlüssels |
 | `ASC_ISSUER_ID` | Issuer-ID des App Store Connect Teams |
 | `ASC_API_KEY_P8` | Vollständiger Inhalt der `.p8`-Datei, einschließlich BEGIN/END-Zeilen |

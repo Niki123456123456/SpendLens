@@ -12,9 +12,15 @@ External processing:
 - Optional AI reading transfers the selected receipt image and the extraction instructions to OpenAI. Receipt images may include purchase history, addresses, payment details or other personal information printed on the receipt.
 - For the native iOS app, this traffic goes directly to OpenAI. A SpendLens backend is not used by that path.
 
+Publisher configuration:
+- Operator: Niklas Nordkamp. No public contact email requested; public support uses GitHub Issues.
+- Support: https://niki123456123456.github.io/SpendLens/ (English: /en/).
+- Privacy: https://niki123456123456.github.io/SpendLens/privacy.html (English: /en/privacy.html).
+- Both localized support/privacy URLs have been saved in App Store Connect.
+
 Unresolved publisher facts:
-- Public privacy-policy URL, support URL and contact email.
-- Publisher legal identity, applicable contact information, regions and trader status.
+- Required private App Review contact details and applicable publisher contact requirements.
+- Regions and confirmation of the account's existing non-trader status for this app.
 - Applicable OpenAI data-retention terms and how they affect the App Store privacy questionnaire.
 - Third-party account revocation/deletion guidance and legally required user rights, based on the publisher's actual situation.
 

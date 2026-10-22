@@ -1,1 +1,1 @@
-SpendLens
+SpendLens: Receipt Organizer
