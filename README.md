@@ -37,7 +37,7 @@ Für **Xcode 27 und iOS 27** aktiviert `app.json` außerdem `expo-build-properti
 
 **Geräteprüfung am 22.10.2026:** Release-Build mit Xcode 27.1 erfolgreich signiert, auf dem iPhone 12 Pro mit iOS 27 installiert und gestartet. Der aktive App-Prozess und der sichtbare Überblick-Bildschirm wurden geprüft. JavaScript ist eingebettet; für diesen installierten Build ist kein Metro-Server nötig. Die echte ChatGPT-Anmeldung und das KI-Auslesen bleiben separat auf dem Gerät zu prüfen.
 
-Profil → „Continue with ChatGPT“ öffnet das sichere iOS-Anmeldefenster. Ein kurzlebiger Listener bindet ausschließlich `127.0.0.1` auf dem iPhone und empfängt den dokumentierten OAuth-Callback. Der anschließende App-Rücksprung enthält nur eine zufällige Abschlussmarkierung. PKCE, State, Nonce und die ID-Token-Signatur samt Issuer, Audience, Ablauf und Kontoidentität werden nativ geprüft. Ausgegebene Client-IDs werden vor dem Token-Austausch gespeichert und wiederverwendet. Tokens verlassen das native Modul nicht und liegen im gerätegebundenen iOS-Schlüsselbund; JavaScript erhält nur Kontometadaten. Abmelden entfernt die Tokens, behält aber die lokale Registrierung. Eine OpenAI-Freigabe wird dadurch nicht widerrufen.
+Profil → „ChatGPT für KI-Auslesen verbinden“ öffnet das sichere iOS-Anmeldefenster. Ein kurzlebiger Listener bindet ausschließlich `127.0.0.1` auf dem iPhone und empfängt den dokumentierten OAuth-Callback. Der anschließende App-Rücksprung enthält nur eine zufällige Abschlussmarkierung. PKCE, State, Nonce und die ID-Token-Signatur samt Issuer, Audience, Ablauf und Kontoidentität werden nativ geprüft. Ausgegebene Client-IDs werden vor dem Token-Austausch gespeichert und wiederverwendet. Tokens verlassen das native Modul nicht und liegen im gerätegebundenen iOS-Schlüsselbund; JavaScript erhält nur Kontometadaten. Trennen der ChatGPT-Verbindung entfernt die Tokens, behält aber die lokale Registrierung. Eine OpenAI-Freigabe wird dadurch nicht widerrufen.
 
 Bilder werden erst nach „Mit KI auslesen“ direkt an OpenAI gesendet. Berechtigungen und verfügbare Modelle werden vom verbundenen Konto gelesen. Fehlende Berechtigung, abgebrochene Streams und API-Fehler werden angezeigt. Es gibt keinen automatischen API-Key-Fallback.
 
@@ -71,7 +71,7 @@ In einem zweiten Terminal:
 npm run web
 ```
 
-Öffne http://localhost:8081. Ohne Server funktionieren die manuelle Erfassung, Beispieldaten, Suche, Detailansicht und Auswertung. Profil → „Continue with ChatGPT“ startet die echte Anmeldung. Der Demo-Modus speichert seine Beispieldaten getrennt von deinen lokalen Einkäufen und deinem verbundenen Konto.
+Öffne http://localhost:8081. Ohne Server funktionieren die manuelle Erfassung, Beispieldaten, Suche, Detailansicht und Auswertung. Profil → „ChatGPT für KI-Auslesen verbinden“ startet die echte Anmeldung. Der Demo-Modus speichert seine Beispieldaten getrennt von deinen lokalen Einkäufen; die KI-Verbindung bleibt davon unabhängig.
 
 Native Entwicklung:
 
@@ -134,9 +134,13 @@ Für öffentlichen Mehrbenutzerbetrieb sind ein persistenter Sitzungs-/Transakti
 
 ## Speicherung und Datenmodell
 
+SpendLens hat kein eigenes Nutzerkonto. ChatGPT ist ausschließlich eine optionale Verbindung zum KI-Dienst: Verbinden, Trennen, Kontowechsel und eine abgelaufene Verbindung wechseln oder löschen keine Bons. Der lokale Speicher verwendet stets `spendlens.ledger.local`; nur der Demo-Modus besitzt weiterhin einen getrennten Speicher. Eine fehlgeschlagene Wiederherstellung der KI-Verbindung verhindert das Laden lokaler Bons nicht.
+
+Beim ersten Start nach der Umstellung werden die früheren Gast- und ChatGPT-Kontoprofile auf diesem Gerät einmalig zusammengeführt. Dabei bleiben Bons, Bildpfade und präzise Beträge erhalten; kollidierende IDs werden mit ihren Referenzen angepasst. Alle alten Daten werden zuerst validiert, dann der vollständige lokale Bestand gespeichert. Erst danach werden alte Profilspeicher entfernt. Ein fehlgeschlagener Schreibvorgang lässt die Originaldaten unverändert. Ein bereits gespeicherter lokaler Bestand wird bei Wiederholung nicht erneut importiert; gelöschte Bons werden dadurch nicht wiederhergestellt. Bisher getrennte Kontobons sind danach gemeinsam auf diesem Gerät sichtbar.
+
 ### JSON-Export auf dem iPhone
 
-Profil → **Alle Bons als JSON exportieren** öffnet das iOS-Teilen-Menü. Dort **In Dateien sichern** wählen. Die Datei enthält alle Bons des aktuellen Profils, unabhängig von Monat oder Suche, samt Händlern, Filialen, Artikeln, Kategorien und Beträgen. Der Demo-Modus exportiert ausschließlich seine Beispieldaten und kennzeichnet sie als `source: demo`.
+Profil → **Alle Bons als JSON exportieren** öffnet das iOS-Teilen-Menü. Dort **In Dateien sichern** wählen. Die Datei enthält alle lokalen Bons (im Demo-Modus nur die Beispieldaten), unabhängig von Monat oder Suche, samt Händlern, Filialen, Artikeln, Kategorien und Beträgen. Der Demo-Modus exportiert ausschließlich seine Beispieldaten und kennzeichnet sie als `source: demo`.
 
 Das versionierte Format `spendlens.receipts` enthält Exportzeitpunkt, den normalisierten `ledger` und die Betrags-Einheiten: `total_cents` in Cent und `unit_price_micros` in Millionstel Euro. Bonfotos, gerätegebundene Bildpfade und Anmeldedaten sind nicht enthalten. Nach Schließen des Teilen-Menüs wird die temporäre Exportdatei aus dem App-Cache entfernt; die gewählte gespeicherte oder geteilte Kopie bleibt erhalten. Ein JSON-Import ist derzeit nicht implementiert.
 
@@ -153,7 +157,7 @@ Das versionierte Format `spendlens.receipts` enthält Exportzeitpunkt, den norma
 ```text
 src/app/          Expo-Router-Screens und Tab-Navigation
 src/components/  UI, Bonformular und Einkaufszeilen
-src/state/       Lokale Daten und Kontowechsel
+src/state/       Lokale Bons, Demo-Modus und optionale KI-Verbindung
 src/lib/         API, OAuth-App-Rückgabe, Bilder und Speicherung
 shared/receipt.ts  Datenmodell, Zod-Schema und Betragsberechnung
 modules/spendlens-openai/  Native iPhone-Anmeldung, Schlüsselbund und direkte OpenAI-Anfragen

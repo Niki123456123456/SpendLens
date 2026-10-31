@@ -1,0 +1,15 @@
+Draft for App Review — send only after the revised build and privacy pages are available.
+
+Thank you for reviewing SpendLens.
+
+Regarding Guideline 4.8:
+SpendLens does not create or authenticate a primary app account. Manual receipt entry, photo attachment, local receipt management, search, spending insights and iOS JSON export are available without signing in.
+
+We have removed the coupling between the ChatGPT connection and the local receipt archive. Connecting, disconnecting or switching ChatGPT accounts leaves the same local receipts available. The interface now separates "Local receipt management" from "Optional AI connection" and labels the action "Connect ChatGPT for AI reading".
+
+ChatGPT authorization is used exclusively to access the user's eligible third-party AI service for optional receipt extraction. An Apple identity cannot grant access to the user's ChatGPT service. Please reassess Guideline 4.8 in light of this separation: there is no primary SpendLens account authenticated through ChatGPT. If an additional equivalent login is still required, please clarify which primary-account functionality you consider to remain dependent on this connection.
+
+Regarding Guidelines 5.1.1(i) and 5.1.2(i):
+Each "Read with AI" action now opens a fresh consent sheet before transmitting a receipt image. It identifies OpenAI (ChatGPT), describes the complete selected receipt image and visible names, addresses, purchase or payment details, explains the extraction purpose and direct iPhone transmission, and links to the SpendLens and OpenAI privacy policies. Only "Agree and send this photo" starts the upload. Canceling or dismissing the sheet sends no image. Manual entry remains available, other stored receipts are not sent, and consent is requested again for every analysis. German and English are supported.
+
+The updated privacy pages describe this flow and the separation between local receipts and the optional AI connection.

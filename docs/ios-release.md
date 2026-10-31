@@ -1,5 +1,11 @@
 # iOS-Auslieferung mit GitHub Actions und EAS
 
+## Review-Rückmeldung vom 30.10.2026
+
+Apple hat Version 1.0.0 (Build 4) wegen 4.8 (Login Services) und 5.1.1(i)/5.1.2(i) (Einwilligung zur Datenübertragung an einen KI-Dienst) abgelehnt. Die manuelle Nutzung ohne Konto war bereits möglich. Die zusätzlich angebotene ChatGPT-Anmeldung wurde trotzdem beanstandet; sie wählte im abgelehnten Build auch das lokale Kontoprofil aus.
+
+Der lokale Quellstand enthält jetzt vor jedem KI-Auslesen einen ausdrücklichen Einwilligungsdialog auf Deutsch und Englisch. Erst die Zustimmung sendet das Bonfoto; Abbrechen und Schließen senden nichts. Die lokalen Datenschutzseiten und Review-Hinweise beschreiben den Ablauf. Diese Änderungen sind noch nicht veröffentlicht oder als neuer Build eingereicht. Die Profilkopplung ist im lokalen Quellstand entfernt: ein gerätegebundener Bonbestand, unabhängig von der optionalen KI-Verbindung. Vorhandene Gast- und Kontobons werden einmalig zusammengeführt, Demo-Daten bleiben getrennt. Die Oberfläche bezeichnet ChatGPT ausdrücklich als KI-Verbindung. Apple muss diese Abgrenzung beim erneuten Review bewerten; eine Annahme wird nicht vorausgesetzt. Die Aussage zum gleichwertigen Schutz durch einen Drittanbieter muss vor Einreichung anhand der tatsächlich geltenden Anbieterbedingungen geprüft werden; eine unbelegte Zusicherung wird nicht hinzugefügt.
+
 ## Bereits im Repository
 
 - `.github/workflows/ios-release.yml`: prüft Pushes und Pull Requests auf `main`. Nach einem erfolgreichen Push auf `main` (oder manuellem Start auf `main`) baut EAS die signierte iOS-Produktions-App und lädt genau diesen Build zu App Store Connect / TestFlight hoch.

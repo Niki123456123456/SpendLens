@@ -3,7 +3,8 @@ SpendLens — data inventory for App Store privacy declarations (implementation 
 Local processing:
 - Purchase history: retailers, branch addresses, dates, items, quantities, prices, categories and totals.
 - User-selected receipt images, retained on the device until the purchase is deleted.
-- Optional account metadata associates local profiles with a ChatGPT connection.
+- Optional ChatGPT account metadata identifies the AI-service connection only. It does not identify a SpendLens account or select a receipt archive.
+- One device-local receipt archive is independent of the AI connection. Former guest/ChatGPT profiles are migrated once into that archive; demo data remains separate.
 - ChatGPT tokens are stored by the native module in the device Keychain.
 - JSON exports contain purchase data and references; they exclude images, credentials and device paths. Sharing happens only when the user initiates export.
 
